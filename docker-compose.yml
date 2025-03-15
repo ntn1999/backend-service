@@ -1,20 +1,20 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    cap_add:
-      - SYS_NICE
-    restart: always
-    environment:
-      - MYSQL_DATABASE=testdb
-      - MYSQL_ROOT_PASSWORD=password
-    ports:
-      - '3306:3306'
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
-    networks:
-      - default
+  #  mysql:
+  #    image: mysql:8.0
+  #    container_name: mysql
+  #    cap_add:
+  #      - SYS_NICE
+  #    restart: always
+  #    environment:
+  #      - MYSQL_DATABASE=testdb
+  #      - MYSQL_ROOT_PASSWORD=password
+  #    ports:
+  #      - '3306:3306'
+  #    volumes:
+  #      - mysql_data:/var/lib/mysql
+  #      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+  #    networks:
+  #      - default
 
   postgres:
     image: postgres
@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: 123456
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
@@ -38,7 +38,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8082:8082"
     networks:
       - default
 
@@ -48,3 +48,4 @@ networks:
 
 volumes:
   mysql_data:
+  postgres:
