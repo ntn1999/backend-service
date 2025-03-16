@@ -3,12 +3,11 @@ package viettel.namnt.service;
 import viettel.namnt.controller.request.UserCreationRequest;
 import viettel.namnt.controller.request.UserPasswordRequest;
 import viettel.namnt.controller.request.UserUpdateRequest;
+import viettel.namnt.controller.response.UserPageResponse;
 import viettel.namnt.controller.response.UserResponse;
 
-import java.util.List;
-
 public interface UserService {
-    List<UserResponse> findAll();
+    UserPageResponse findAll(String keyword, String sort, int page, int size);
 
     UserResponse findById(Long id);
 
