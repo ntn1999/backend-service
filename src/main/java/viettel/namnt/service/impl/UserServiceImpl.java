@@ -16,6 +16,7 @@ import viettel.namnt.controller.request.UserPasswordRequest;
 import viettel.namnt.controller.request.UserUpdateRequest;
 import viettel.namnt.controller.response.UserPageResponse;
 import viettel.namnt.controller.response.UserResponse;
+import viettel.namnt.exception.InvalidDataException;
 import viettel.namnt.exception.ResourceNotFoundException;
 import viettel.namnt.model.AddressEntity;
 import viettel.namnt.model.UserEntity;
@@ -109,6 +110,12 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public long save(UserCreationRequest req) {
         log.info("Saving user: {}", req);
+
+        UserEntity userByEmail = userRepository.findByEmail(req.getEmail());
+        if (userByEmail != null) {
+            throw new InvalidDataException("Email already exists");
+        }
+
         UserEntity user = new UserEntity();
         user.setFirstName(req.getFirstName());
         user.setLastName(req.getLastName());
@@ -119,6 +126,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(req.getUsername());
         user.setType(req.getType());
         user.setStatus(UserStatus.NONE);
+        
         userRepository.save(user);
         log.info("Saved user: {}", user);
 
