@@ -1,5 +1,7 @@
 package viettel.namnt.config;
 
+import com.sendgrid.SendGrid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,5 +34,10 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SendGrid sendGrid(@Value("${spring.sendGrid.apiKey}") String apiKey) {
+        return new SendGrid(apiKey);
     }
 }
