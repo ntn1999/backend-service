@@ -16,7 +16,7 @@ spring:
     hibernate:
       ddl-auto: none
   sendGrid:
-    apiKey: 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
+    #    apiKey: ${SENDGRID_API_KEY}
     fromEmail: nam14nt@gmail.com
     templateId: d-8bc9c4205706481796f3f3dbb872cf48
     verificationLink: http://localhost:8080/user/confirm-email
