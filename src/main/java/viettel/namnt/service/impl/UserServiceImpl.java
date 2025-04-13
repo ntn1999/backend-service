@@ -22,8 +22,10 @@ import viettel.namnt.model.AddressEntity;
 import viettel.namnt.model.UserEntity;
 import viettel.namnt.repository.AddressRepository;
 import viettel.namnt.repository.UserRepository;
+import viettel.namnt.service.EmailService;
 import viettel.namnt.service.UserService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public UserPageResponse findAll(String keyword, String sort, int page, int size) {
@@ -126,12 +129,12 @@ public class UserServiceImpl implements UserService {
         user.setUsername(req.getUsername());
         user.setType(req.getType());
         user.setStatus(UserStatus.NONE);
-        
-        userRepository.save(user);
+
+        UserEntity result = userRepository.save(user);
         log.info("Saved user: {}", user);
 
-        if (user.getId() != null) {
-            log.info("user id: {}", user.getId());
+        if (result.getId() != null) {
+            log.info("user id: {}", result.getId());
             List<AddressEntity> addresses = new ArrayList<>();
             req.getAddresses().forEach(address -> {
                 AddressEntity addressEntity = new AddressEntity();
@@ -143,15 +146,23 @@ public class UserServiceImpl implements UserService {
                 addressEntity.setCity(address.getCity());
                 addressEntity.setCountry(address.getCountry());
                 addressEntity.setAddressType(address.getAddressType());
-                addressEntity.setUserId(user.getId());
+                addressEntity.setUserId(result.getId());
                 addresses.add(addressEntity);
             });
             addressRepository.saveAll(addresses);
             log.info("Saved addresses: {}", addresses);
         }
 
-        return user.getId();
+        // Send email verification
+        try {
+            emailService.sendVerificationEmail(req.getEmail(), req.getUsername());
+        } catch (IOException e) {
+            throw new InvalidDataException("Send email failed");
+        }
+
+        return result.getId();
     }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
