@@ -75,7 +75,8 @@ public class UserEntity extends AbstractEntity<Long> implements UserDetails, Ser
         List<String> roleNames = roleList.stream().map(Role::getName).toList();
         log.info("User roles: {}", roleNames);
 
-        return roleNames.stream().map(SimpleGrantedAuthority::new).toList();
+        return roleNames.stream().map(s -> new SimpleGrantedAuthority("ROLE_" + s.toUpperCase())).toList();
+        // return roleNames.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override

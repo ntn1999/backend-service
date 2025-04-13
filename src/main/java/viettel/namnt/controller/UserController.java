@@ -34,7 +34,8 @@ public class UserController {
 
     @Operation(summary = "Get user list", description = "API retrieve user from database")
     @GetMapping("/list")
-    @PreAuthorize("hasAnyAuthority('admin', 'manager')")
+//    @PreAuthorize("hasAnyAuthority('admin', 'manager')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public Map<String, Object> getList(@RequestParam(required = false) String keyword,
                                        @RequestParam(required = false) String sort,
                                        @RequestParam(defaultValue = "0") int page,
@@ -52,7 +53,8 @@ public class UserController {
 
     @Operation(summary = "Get user detail", description = "API retrieve user detail by ID from database")
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAnyAuthority('admin', 'manager')")
+//    @PreAuthorize("hasAnyAuthority('admin', 'manager')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public Map<String, Object> getUserDetail(@PathVariable @Min(value = 1, message = "userId must be equals or greater than 1") Long userId) {
         log.info("Get user detail by ID: {}", userId);
 
@@ -68,7 +70,8 @@ public class UserController {
 
     @Operation(summary = "Create User", description = "API add new user to database")
     @PostMapping("/add")
-    @PreAuthorize("hasAuthority('admin')")
+//    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> createUser(@RequestBody @Valid UserCreationRequest request) {
         log.info("Create User: {}", request);
 
@@ -82,7 +85,8 @@ public class UserController {
 
     @Operation(summary = "Update User", description = "API update user to database")
     @PutMapping("/upd")
-    @PreAuthorize("hasAnyAuthority('manager', 'user')")
+//    @PreAuthorize("hasAnyAuthority('manager', 'user')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'USER')")
     public Map<String, Object> updateUser(@RequestBody @Valid UserUpdateRequest request) {
         log.info("Updating user: {}", request);
 
@@ -98,7 +102,8 @@ public class UserController {
 
     @Operation(summary = "Change Password", description = "API change password for user to database")
     @PatchMapping("/change-pwd")
-    @PreAuthorize("hasAuthority('user')")
+//    @PreAuthorize("hasAuthority('user')")
+    @PreAuthorize("hasRole('USER')")
     public Map<String, Object> changePassword(@RequestBody @Valid UserPasswordRequest request) {
         log.info("Changing password for user: {}", request);
 
@@ -129,7 +134,8 @@ public class UserController {
 
     @Operation(summary = "Delete user", description = "API activate user from database")
     @DeleteMapping("/del/{userId}")
-    @PreAuthorize("hasAuthority('admin')")
+//    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Map<String, Object> deleteUser(@PathVariable @Min(value = 1, message = "userId must be equals or greater than 1") Long userId) {
         log.info("Deleting user: {}", userId);
 
