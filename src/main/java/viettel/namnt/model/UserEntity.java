@@ -13,6 +13,7 @@ import viettel.namnt.common.Gender;
 import viettel.namnt.common.UserStatus;
 import viettel.namnt.common.UserType;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -76,7 +77,6 @@ public class UserEntity extends AbstractEntity<Long> implements UserDetails, Ser
         log.info("User roles: {}", roleNames);
 
         return roleNames.stream().map(s -> new SimpleGrantedAuthority("ROLE_" + s.toUpperCase())).toList();
-        // return roleNames.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
@@ -97,5 +97,15 @@ public class UserEntity extends AbstractEntity<Long> implements UserDetails, Ser
     @Override
     public boolean isEnabled() {
         return UserStatus.ACTIVE.equals(status);
+    }
+
+    private void writeObject(java.io.ObjectOutputStream stream)
+            throws IOException {
+        stream.defaultWriteObject();
+    }
+
+    private void readObject(java.io.ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
     }
 }

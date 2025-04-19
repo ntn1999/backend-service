@@ -1,6 +1,9 @@
 package viettel.namnt.service;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -83,10 +86,6 @@ class UserServiceTest {
         userService = new UserServiceImpl(userRepository, addressRepository, passwordEncoder, emailService);
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void testGetUserList_Success() {
         // Giả lập phương thức search của UserRepository
@@ -97,7 +96,7 @@ class UserServiceTest {
         UserPageResponse result = userService.findAll(null, null, 0, 20);
 
         Assertions.assertNotNull(result);
-        assertEquals(2, result.totalElements);
+        assertEquals(2, result.getTotalElements());
     }
 
     @Test
@@ -110,7 +109,7 @@ class UserServiceTest {
         UserPageResponse result = userService.findAll("tay", null, 0, 20);
 
         Assertions.assertNotNull(result);
-        assertEquals(2, result.totalElements);
+        assertEquals(2, result.getTotalElements());
         assertEquals("tayjava", result.getUsers().get(0).getUsername());
     }
 
@@ -144,30 +143,6 @@ class UserServiceTest {
         ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> userService.findById(10L));
         assertEquals("User not found", thrown.getMessage());
     }
-
-//    @Test
-//    void testFindByUsername_Success() {
-//        // Giả lập hành vi của UserRepository
-//        when(userRepository.findByUsername("tayjava")).thenReturn(tayJava);
-//
-//        // Gọi phương thức cần kiểm tra
-//        UserResponse result = userService.findByUsername("tayjava");
-//
-//        Assertions.assertNotNull(result);
-//        assertEquals("tayjava", result.getUsername());
-//    }
-//
-//    @Test
-//    void testFindByEmail_Success() {
-//        // Giả lập hành vi của UserRepository
-//        when(userRepository.findByEmail("quoctay87@gmail.com")).thenReturn(tayJava);
-//
-//        // Gọi phương thức cần kiểm tra
-//        UserResponse result = userService.findByEmail("quoctay87@gmail.com");
-//
-//        Assertions.assertNotNull(result);
-//        assertEquals("quoctay87@gmail.com", result.getEmail());
-//    }
 
     @Test
     void testSave_Success() {
