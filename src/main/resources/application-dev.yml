@@ -30,12 +30,12 @@ springdoc:
 openapi:
   service:
     api-docs: backend-service
-    server: http://localhost:${server.port}
+    server: ${BACKEND_HOST:http://localhost:${server.port}}
     title: Backend service
     version: 1.0.0
 
 jwt:
-  expiryMinutes: 1
+  expiryMinutes: 60
   expiryDay: 14
   accessKey: CFvQ9zB9oShvQjLxx56uIg6YoJW/7mTH7S8BKXfVkuU=
   refreshKey: LyEYa3mbtUqK3hKcjzZv1uNmJi55PYoQkiGvrIYayxU=
